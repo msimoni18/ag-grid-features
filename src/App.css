@@ -35,6 +35,7 @@
   border: 1px solid var(--ag-grid-border-color);
   border-left: none;
   padding: 10px;
+  width: 30%;
 }
 
 .collapsed {

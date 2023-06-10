@@ -3,3 +3,66 @@
   padding: 0;
   box-sizing: 0;
 }
+
+.search {
+  width: 100%;
+  height: 30px;
+  margin-bottom: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style: none;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+li:hover {
+  background-color: rgba(175, 175, 175, 0.5);
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
+  margin-left: 5px;
+}
+
+.icon {
+  margin-right: 10px;
+  cursor: grab;
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+.button-container {
+  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+
+.button-container p {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.sort-btn {
+  height: 30px;
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+.sort-btn:hover {
+  transition-duration: 0.2s;
+  background-color: rgba(175, 175, 175, 0.5);
+}
