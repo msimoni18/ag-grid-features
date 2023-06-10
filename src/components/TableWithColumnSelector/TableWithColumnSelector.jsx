@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import PropTypes from "prop-types";
 import { AgGridReact } from "ag-grid-react";
 import DoubleArrowIcon from "@mui/icons-material/DoubleArrow";
@@ -7,51 +7,8 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
 export default function TableWithColumnSelector({ data, defaultColumns }) {
-  const [collapsed, setCollapsed] = useState(false);
   const [list, setList] = useState(defaultColumns);
-
-  const toggleListItem = (name) => {
-    const newList = list.map((row) =>
-      row.name === name ? { ...row, checked: !row.checked } : row
-    );
-    setList(newList);
-  };
-
-  const sortByCheck = () => {
-    const newList = [...list];
-    newList.sort((a, b) => b.checked - a.checked);
-    setList(newList);
-  };
-
-  const sortByName = () => {
-    const newList = [...list];
-    newList.sort((a, b) => a.name.localeCompare(b.name));
-    setList(newList);
-  };
-
-  const [isDragging, setIsDragging] = useState(false);
-  const draggingItem = useRef();
-  const dragOverItem = useRef();
-
-  const handleDragStart = (event, position) => {
-    draggingItem.current = position;
-    setIsDragging(true);
-  };
-
-  const handleDragEnter = (event, position) => {
-    dragOverItem.current = position;
-    const listCopy = [...list];
-    const draggingItemContent = listCopy[draggingItem.current];
-    listCopy.splice(draggingItem.current, 1);
-    listCopy.splice(dragOverItem.current, 0, draggingItemContent);
-    draggingItem.current = dragOverItem.current;
-    dragOverItem.current = null;
-    setList(listCopy);
-  };
-
-  const handleDrop = () => {
-    setIsDragging(false);
-  };
+  const [collapsed, setCollapsed] = useState(false);
 
   const [rowData] = useState(data);
   const [columnDefs, setColumnDefs] = useState(null);
@@ -89,6 +46,7 @@ export default function TableWithColumnSelector({ data, defaultColumns }) {
       .getAllGridColumns()
       .map((row) => row.colId);
 
+    // Add checked list items first
     const newItems = [];
     newOrder.forEach((col) => {
       const checkedStatus = list.filter((item) => {
@@ -97,6 +55,13 @@ export default function TableWithColumnSelector({ data, defaultColumns }) {
         }
       });
       newItems.push(checkedStatus[0]);
+    });
+
+    // Add unchecked list items back into list
+    list.forEach((item) => {
+      if (!item.checked) {
+        newItems.push(item);
+      }
     });
 
     setList(newItems);
@@ -120,16 +85,7 @@ export default function TableWithColumnSelector({ data, defaultColumns }) {
       <div
         className={collapsed ? "input-selector collapsed" : "input-selector"}
       >
-        <SearchableList
-          list={list}
-          toggleItem={toggleListItem}
-          sortByCheck={sortByCheck}
-          sortByName={sortByName}
-          isDragging={isDragging}
-          dragEnter={handleDragEnter}
-          dragStart={handleDragStart}
-          dropItem={handleDrop}
-        />
+        <SearchableList list={list} setList={setList} />
       </div>
     </div>
   );
